@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GLR Holidays – Travel Booking</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
+    body { background: #0a0a0a; color: #fff; overflow-x: hidden; min-height: 100vh; }
+    .bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: linear-gradient(135deg, #0a0a2e 0%, #1a0a2e 25%, #0a1a3e 50%, #0a0a2e 75%, #1a0a2e 100%); overflow: hidden; }
+    .stars { position: absolute; width: 100%; height: 100%; background-image: radial-gradient(2px 2px at 20px 30px, #eee, transparent), radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent), radial-gradient(1px 1px at 90px 40px, #fff, transparent); background-size: 200px 100px; animation: twinkle 4s infinite alternate; }
+    @keyframes twinkle { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+    .particles { position: absolute; width: 100%; height: 100%; }
+    .particle { position: absolute; width: 4px; height: 4px; background: rgba(255,215,0,0.3); border-radius: 50%; animation: float linear infinite; }
+    .particle:nth-child(1){left:10%;animation-duration:8s}.particle:nth-child(2){left:20%;animation-duration:12s;width:6px;height:6px}.particle:nth-child(3){left:35%;animation-duration:10s}.particle:nth-child(4){left:50%;animation-duration:14s;width:8px;height:8px}.particle:nth-child(5){left:65%;animation-duration:9s}.particle:nth-child(6){left:75%;animation-duration:11s;width:5px;height:5px}.particle:nth-child(7){left:85%;animation-duration:13s}.particle:nth-child(8){left:95%;animation-duration:7s;width:7px;height:7px}
+    @keyframes float { 0% { transform: translateY(100vh); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-10vh); opacity: 0; } }
+    .nebula { position: absolute; border-radius: 50%; filter: blur(80px); animation: pulse 6s infinite alternate; }
+    .nebula-1 { width: 500px; height: 500px; background: rgba(255,215,0,0.05); top: -100px; right: -100px; }
+    .nebula-2 { width: 400px; height: 400px; background: rgba(100,50,200,0.05); bottom: -100px; left: -100px; }
+    @keyframes pulse { 100% { transform: scale(1.3); opacity: 1; } }
+    header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(15,52,96,0.85); backdrop-filter: blur(10px); padding: 15px 8%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; border-bottom: 1px solid rgba(255,215,0,0.1); }
+    .logo { font-size: 30px; font-weight: bold; color: #FFD700; text-shadow: 0 0 20px rgba(255,215,0,0.3); }
+    nav ul { display: flex; list-style: none; }
+    nav ul li { margin-left: 30px; }
+    nav ul li a { text-decoration: none; color: white; font-weight: 500; transition: 0.3s; }
+    nav ul li a:hover { color: #FFD700; }
+    .hero { height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80"); background-size: cover; background-position: center; background-attachment: fixed; }
+    .hero h1 { font-size: 70px; margin-bottom: 20px; background: linear-gradient(135deg,#FFD700,#FFA500); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 22px; margin-bottom: 35px; }
+    .hero .btn { padding: 18px 45px; background: linear-gradient(135deg,#FFD700,#FFA500); color: #000; text-decoration: none; font-weight: bold; border-radius: 50px; display: inline-block; transition: 0.3s; }
+    .hero .btn:hover { transform: scale(1.05); }
+    .about { padding: 90px 8%; background: rgba(10,10,30,0.9); }
+    .title { text-align: center; font-size: 40px; margin-bottom: 40px; color: #FFD700; }
+    .about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    .about-content img { width: 100%; border-radius: 15px; }
+    .about-content p { font-size: 18px; line-height: 1.8; }
+    .about-content p strong { color: #FFD700; }
+    .search-box { padding: 60px 8%; background: rgba(20,20,50,0.85); text-align: center; }
+    .search-box input { width: 400px; max-width: 90%; padding: 15px 25px; border-radius: 50px; border: 2px solid rgba(255,215,0,0.3); background: rgba(255,255,255,0.05); color: white; font-size: 17px; }
+    .packages { padding: 80px 8%; background: rgba(10,10,30,0.9); }
+    .package-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+    .card { background: rgba(255,255,255,0.05); border-radius: 15px; overflow: hidden; transition: 0.4s; display: flex; flex-direction: column; border: 1px solid rgba(255,215,0,0.1); }
+    .card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(255,215,0,0.15); }
+    .card img { width: 100%; height: 220px; object-fit: cover; }
+    .card-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+    .card h3 { margin-bottom: 5px; color: #FFD700; font-size: 20px; }
+    .card .location, .card .duration { color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 5px; }
+    .card .price { font-size: 22px; font-weight: bold; color: #FFA500; margin: 8px 0; }
+    .card .rating { color: #FFD700; margin-bottom: 10px; }
+    .card-buttons { display: flex; gap: 10px; margin-top: auto; }
+    .card-buttons button { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; }
+    .book-btn { background: linear-gradient(135deg,#FFD700,#FFA500); color: #000; }
+    .details-btn { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,215,0,0.2) !important; }
+    .view-more-container { text-align: center; margin-top: 40px; }
+    .view-more-btn { padding: 16px 50px; background: linear-gradient(135deg,#FFD700,#FFA500); color: #000; border: none; border-radius: 50px; font-size: 18px; font-weight: 600; cursor: pointer; }
+    .booking { padding: 80px 8%; background: rgba(20,20,50,0.85); }
+    .form { background: rgba(255,255,255,0.05); padding: 35px; border-radius: 15px; max-width: 950px; margin: auto; border: 1px solid rgba(255,215,0,0.1); }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    .form input, .form select, .form textarea { width: 100%; padding: 14px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 16px; background: rgba(255,255,255,0.05); color: white; }
+    .form input::placeholder, .form textarea::placeholder { color: rgba(255,255,255,0.4); }
+    .form select option { background: #1a1a3e; }
+    .form textarea { grid-column: 1 / -1; height: 100px; resize: none; }
+    .passenger-details { grid-column: 1 / -1; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; border: 1px dashed rgba(255,215,0,0.2); display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+    .passenger-details h4 { grid-column: 1 / -1; color: #FFD700; font-size: 18px; }
+    .upi-section { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 30px; background: rgba(255,215,0,0.05); padding: 25px 20px; border-radius: 16px; border: 2px solid rgba(255,215,0,0.2); }
+    .upi-section .qr-box img { width: 200px; height: 200px; border-radius: 12px; background: white; padding: 10px; cursor: pointer; border: 2px solid #FFD700; }
+    .upi-section .upi-info .upi-id { background: #FFD700; color: #000; padding: 8px 20px; border-radius: 40px; font-size: 18px; font-weight: 600; }
+    .upi-section .upi-info .copy-btn { background: rgba(255,215,0,0.2); color: #FFD700; border: 1px solid #FFD700; padding: 5px 15px; border-radius: 20px; cursor: pointer; margin-left: 10px; }
+    .payment-status { grid-column: 1 / -1; padding: 12px; border-radius: 10px; text-align: center; font-weight: 600; display: none; }
+    .payment-status.success { display: block; background: rgba(40,167,69,0.2); color: #28a745; border: 2px solid #28a745; }
+    .payment-status.pending { display: block; background: rgba(255,193,7,0.2); color: #ffc107; border: 2px solid #ffc107; }
+    .payment-status.sending { display: block; background: rgba(0,123,255,0.2); color: #007bff; border: 2px solid #007bff; }
+    .payment-status.email-error { display: block; background: rgba(220,53,69,0.2); color: #dc3545; border: 2px solid #dc3545; }
+    .form .btn-pay { grid-column: 1 / -1; margin-top: 15px; padding: 16px; background: linear-gradient(135deg,#28a745,#20c997); border: none; color: white; font-size: 20px; font-weight: bold; border-radius: 50px; cursor: pointer; }
+    .form .btn-pay:disabled { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); cursor: not-allowed; }
+    .simulate-payment-btn { grid-column: 1 / -1; padding: 12px; background: linear-gradient(135deg,#FFD700,#FFA500); border: none; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    .selected-package-display { grid-column: 1 / -1; background: rgba(255,215,0,0.05); padding: 12px 20px; border-radius: 10px; border-left: 5px solid #FFD700; display: flex; justify-content: space-between; }
+    .manager-login { padding: 80px 8%; background: rgba(10,10,30,0.95); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .login-container { background: rgba(255,255,255,0.05); padding: 50px; border-radius: 20px; max-width: 450px; width: 100%; border: 1px solid rgba(255,215,0,0.2); }
+    .login-container h2 { color: #FFD700; text-align: center; margin-bottom: 10px; }
+    .login-container .login-icon { text-align: center; font-size: 60px; margin-bottom: 20px; }
+    .login-container .form-group { margin-bottom: 20px; }
+    .login-container .form-group label { display: block; color: rgba(255,255,255,0.7); margin-bottom: 8px; font-size: 14px; }
+    .login-container .form-group input { width: 100%; padding: 14px 18px; border: 1px solid rgba(255,215,0,0.2); border-radius: 10px; background: rgba(255,255,255,0.05); color: white; font-size: 16px; }
+    .login-container .login-btn { width: 100%; padding: 16px; background: linear-gradient(135deg,#FFD700,#FFA500); color: #000; border: none; border-radius: 10px; font-size: 18px; font-weight: 600; cursor: pointer; }
+    .login-error, .login-success { padding: 12px; border-radius: 8px; text-align: center; margin-top: 15px; display: none; }
+    .login-error { background: rgba(220,53,69,0.2); color: #dc3545; }
+    .login-error.show { display: block; }
+    .login-success { background: rgba(40,167,69,0.2); color: #28a745; }
+    .login-success.show { display: block; }
+    .manager-dashboard { display: none; padding: 40px 8%; background: rgba(10,10,30,0.95); min-height: 100vh; }
+    .manager-dashboard.active { display: block; }
+    .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,215,0,0.1); }
+    .dashboard-header h2 { color: #FFD700; }
+    .logout-btn { padding: 12px 30px; background: rgba(192,57,43,0.8); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; }
+    .dashboard-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .stat-card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,215,0,0.1); }
+    .stat-card .stat-number { font-size: 40px; font-weight: 700; color: #FFD700; }
+    .stat-card .stat-label { color: rgba(255,255,255,0.6); font-size: 14px; }
+    .dashboard-filters { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
+    .dashboard-filters input, .dashboard-filters select { padding: 12px 18px; border: 1px solid rgba(255,215,0,0.2); border-radius: 10px; background: rgba(255,255,255,0.05); color: white; flex: 1; min-width: 180px; }
+    .dashboard-filters select option { background: #1a1a3e; }
+    .bookings-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .bookings-table th { text-align: left; padding: 12px 15px; color: #FFD700; border-bottom: 2px solid rgba(255,215,0,0.2); }
+    .bookings-table td { padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.85); }
+    .booking-status { padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
+    .booking-status.confirmed { background: rgba(40,167,69,0.2); color: #28a745; }
+    .booking-status.pending { background: rgba(255,193,7,0.2); color: #ffc107; }
+    .booking-status.cancelled { background: rgba(220,53,69,0.2); color: #dc3545; }
+    .no-bookings { text-align: center; color: rgba(255,255,255,0.4); padding: 60px 0; font-size: 18px; }
+    .details-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99998; display: none; justify-content: center; align-items: center; padding: 20px; }
+    .details-overlay.active { display: flex; }
+    .details-popup { background: rgba(20,20,50,0.95); border-radius: 20px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 35px; border: 1px solid rgba(255,215,0,0.1); }
+    .details-popup .close-details { float: right; background: rgba(192,57,43,0.8); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; cursor: pointer; }
+    .details-popup h2 { color: #FFD700; margin-bottom: 5px; }
+    .details-popup .popup-price { font-size: 28px; font-weight: bold; color: #FFA500; margin: 10px 0; }
+    .details-popup .popup-rating { color: #FFD700; font-size: 20px; }
+    .details-popup .popup-section { margin: 15px 0; }
+    .details-popup .popup-section h4 { color: #FFD700; margin-bottom: 8px; }
+    .details-popup .popup-section ul { list-style: none; }
+    .details-popup .popup-section ul li { padding: 6px 0 6px 25px; position: relative; color: rgba(255,255,255,0.8); }
+    .details-popup .popup-section ul li:before { content: "✔"; position: absolute; left: 0; color: #28a745; }
+    .details-popup .popup-book-btn { width: 100%; padding: 15px; background: linear-gradient(135deg,#FFD700,#FFA500); color: #000; border: none; border-radius: 10px; font-size: 18px; font-weight: 600; cursor: pointer; margin-top: 15px; }
+    .badge { display: inline-block; padding: 2px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-left: 5px; color: white; }
+    .badge.popular { background: #e74c3c; }
+    .badge.luxury { background: #8e44ad; }
+    .badge.adventure { background: #27ae60; }
+    .badge.winter { background: #3498db; }
+    footer { text-align: center; padding: 50px 20px; background: rgba(5,5,20,0.95); color: rgba(255,255,255,0.7); border-top: 1px solid rgba(255,215,0,0.1); }
+    footer h3 { color: #FFD700; margin-bottom: 15px; }
+    @media (max-width: 900px) { .about-content { grid-template-columns: 1fr; } .hero h1 { font-size: 42px; } nav ul { display: none; } .package-grid { grid-template-columns: 1fr; } .dashboard-stats { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+
+  <div class="bg-container">
+    <div class="stars"></div>
+    <div class="particles">
+      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+      <div class="particle"></div><div class="particle"></div>
+    </div>
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+  </div>
+
+  <header>
+    <div class="logo">GLR Holidays</div>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#packages">Packages</a></li>
+        <li><a href="#booking">Booking</a></li>
+        <li><a href="#manager">Manager</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>Explore The World With GLR</h1>
+      <p>Book your dream vacation with premium travel packages.</p>
+      <a href="#packages" class="btn">✨ Explore Packages</a>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <h2 class="title">⭐ Why Choose GLR Holidays?</h2>
+    <div class="about-content">
+      <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=900" alt="Travel">
+      <div>
+        <p><strong>GLR Holidays</strong> – premium travel experiences with secure booking.<br><br>
+        ✔ Best Holiday Packages<br>✔ Secure Online Booking<br>✔ Instant Confirmation<br>✔ Affordable Prices<br>✔ 24/7 Customer Support<br>✔ Hotel + Flight + Transport</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="search-box">
+    <h2 class="title">🔍 Search Destination</h2>
+    <input type="text" id="search" placeholder="Search destination...">
+  </section>
+
+  <section class="packages" id="packages">
+    <h2 class="title">🌟 Popular Packages</h2>
+    <div class="package-grid" id="packageGrid"></div>
+    <div class="view-more-container" id="viewMoreContainer">
+      <button class="view-more-btn" id="viewMoreBtn" onclick="togglePackages()">📦 View More Packages</button>
+    </div>
+  </section>
+
+  <div class="details-overlay" id="detailsOverlay">
+    <div class="details-popup" id="detailsPopup">
+      <button class="close-details" onclick="closeDetails()">×</button>
+      <div id="detailsContent"></div>
+    </div>
+  </div>
+
+  <section class="booking" id="booking">
+    <h2 class="title">✈️ Travel Booking & Payment</h2>
+    <div class="form">
+      <form id="bookingForm">
+        <div class="form-grid">
+          <div class="selected-package-display" id="selectedPackageDisplay">
+            <span>📦 Selected Package: <span class="package-name" id="displayPackageName">None selected</span></span>
+            <span class="package-price" id="displayPackagePrice">₹0</span>
+          </div>
+          <div class="passenger-details">
+            <h4>👤 Passenger Details</h4>
+            <input type="text" id="passengerName" placeholder="Passenger Full Name" required>
+            <input type="text" id="passengerAge" placeholder="Age" required>
+            <select id="passengerGender" required>
+              <option value="">Gender</option><option>Male</option><option>Female</option><option>Other</option>
+            </select>
+            <input type="text" id="passengerId" placeholder="ID Proof (Aadhar / Passport)" required>
+          </div>
+          <input type="text" id="name" placeholder="Booking Contact Name" required>
+          <input type="email" id="email" placeholder="Email Address" required>
+          <input type="tel" id="phone" placeholder="Mobile Number (10 digit)" required pattern="[0-9]{10}">
+          <input type="text" id="selectedPackage" placeholder="Selected Package" readonly>
+          <input type="date" id="travelDate" required>
+          <input type="number" id="persons" placeholder="No. of Travelers" min="1" required value="1">
+          <select id="transport"><option>Flight</option><option>Train</option><option>Bus</option></select>
+          <select id="hotel"><option>3 Star Hotel</option><option>4 Star Hotel</option><option>5 Star Hotel</option></select>
+          <select id="payment"><option>UPI (QR)</option><option>Credit Card</option><option>Debit Card</option><option>Net Banking</option></select>
+          <textarea placeholder="Special Requests (optional)"></textarea>
+          <div class="upi-section">
+            <div class="qr-box">
+              <h4 style="color:#FFD700;">📱 Scan to Pay</h4>
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=gritheesh682-1@okhdfcbank&pn=GLR%20Holidays&cu=INR" alt="UPI QR" id="qrCodeImage" />
+              <p style="font-size:12px;color:rgba(255,255,255,0.4);">Click the QR code to simulate payment</p>
+            </div>
+            <div class="upi-info">
+              <p><strong>📌 UPI ID:</strong> <span class="upi-id" id="upiIdDisplay">gritheesh682-1@okhdfcbank</span>
+                <button class="copy-btn" onclick="copyUPI()" type="button">📋 Copy</button></p>
+              <p><strong>💰 Amount:</strong> <span id="displayAmount" style="font-size:24px;font-weight:700;color:#FFA500;">₹0</span></p>
+            </div>
+          </div>
+          <div id="paymentStatus" class="payment-status pending">⏳ Please complete the payment by scanning the QR code</div>
+          <button type="button" class="simulate-payment-btn" id="simulatePayBtn">💳 Simulate Payment (Demo)</button>
+          <button type="button" class="btn-pay" id="confirmPayBtn" disabled>✅ Confirm Payment & Book</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="manager-login" id="manager">
+    <div class="login-container" id="loginContainer">
+      <div class="login-icon">👔</div>
+      <h2>Manager Login</h2>
+      <div class="form-group"><label>📧 Username</label><input type="text" id="loginUsername" placeholder="Enter username"></div>
+      <div class="form-group"><label>🔒 Password</label><input type="password" id="loginPassword" placeholder="Enter password"></div>
+      <button class="login-btn" onclick="handleLogin()">🔐 Login to Dashboard</button>
+      <div class="login-error" id="loginError">❌ Invalid credentials!</div>
+      <div class="login-success" id="loginSuccess">✅ Login successful!</div>
+    </div>
+  </section>
+
+  <section class="manager-dashboard" id="managerDashboard">
+    <div class="dashboard-header">
+      <h2>📊 Manager Dashboard</h2>
+      <button class="logout-btn" onclick="handleLogout()">🚪 Logout</button>
+    </div>
+    <div class="dashboard-stats">
+      <div class="stat-card"><div class="stat-number" id="totalBookings">0</div><div class="stat-label">Total Bookings</div></div>
+      <div class="stat-card"><div class="stat-number" id="totalRevenue">₹0</div><div class="stat-label">Total Revenue</div></div>
+      <div class="stat-card"><div class="stat-number" id="totalPackages">16</div><div class="stat-label">Total Packages</div></div>
+      <div class="stat-card"><div class="stat-number" id="totalCustomers">0</div><div class="stat-label">Total Customers</div></div>
+    </div>
+    <div class="dashboard-filters">
+      <input type="text" id="searchBooking" placeholder="🔍 Search..." onkeyup="filterBookings()">
+      <select id="filterPackage" onchange="filterBookings()"><option value="">All Packages</option></select>
+      <select id="filterStatus" onchange="filterBookings()">
+        <option value="">All Status</option><option value="confirmed">✅ Confirmed</option>
+        <option value="pending">⏳ Pending</option><option value="cancelled">❌ Cancelled</option>
+      </select>
+      <button onclick="clearFilters()" style="padding:12px 25px;background:rgba(255,215,0,0.2);color:#FFD700;border:1px solid #FFD700;border-radius:10px;cursor:pointer;">Clear</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="bookings-table">
+        <thead><tr><th>Booking ID</th><th>Customer</th><th>Package</th><th>Date</th><th>Travelers</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody id="bookingsTableBody"><tr><td colspan="7" class="no-bookings">No bookings yet</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <h3>GLR Holidays – Travel Booking</h3>
+    <p>📧 support@glrholidays.com</p>
+    <p>📞 +91 98765 43210</p>
+    <p>📍 Chennai, Tamil Nadu, India</p>
+    <p>© 2026 GLR Holidays. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:5000';
+    let authToken = localStorage.getItem('glr_token') || '';
+    let cachedBookings = [];
+
+    async function apiRequest(endpoint, options = {}) {
+      const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+      if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
+      const res = await fetch(API_BASE_URL + endpoint, { ...options, headers });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      return data;
+    }
+
+    function handleLogin() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      const errorDiv = document.getElementById('loginError');
+      const successDiv = document.getElementById('loginSuccess');
+      errorDiv.classList.remove('show'); successDiv.classList.remove('show');
+      if (!username || !password) { errorDiv.classList.add('show'); return; }
+      apiRequest('/api/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) })
+        .then((data) => {
+          authToken = data.token;
+          localStorage.setItem('glr_token', authToken);
+          successDiv.classList.add('show');
+          setTimeout(async () => {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('managerDashboard').classList.add('active');
+            document.getElementById('managerDashboard').scrollIntoView({ behavior: 'smooth' });
+            await loadDashboardData();
+            populatePackageFilter();
+          }, 800);
+        })
+        .catch((err) => { errorDiv.classList.add('show'); errorDiv.textContent = '❌ ' + err.message; });
+    }
+
+    document.getElementById('loginPassword').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLogin(); });
+
+    function handleLogout() {
+      if (!confirm('Logout?')) return;
+      authToken = ''; cachedBookings = [];
+      localStorage.removeItem('glr_token');
+      document.getElementById('managerDashboard').classList.remove('active');
+      document.getElementById('loginContainer').style.display = 'block';
+      document.getElementById('loginContainer').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function fetchBookings() {
+      if (!authToken) return;
+      try { cachedBookings = await apiRequest('/api/bookings'); }
+      catch (err) { console.error(err); cachedBookings = []; }
+    }
+
+    function populatePackageFilter() {
+      const packages = new Set();
+      cachedBookings.forEach((b) => b.package && packages.add(b.package));
+      const sel = document.getElementById('filterPackage');
+      while (sel.options.length > 1) sel.remove(1);
+      packages.forEach((p) => { const o = document.createElement('option'); o.value = p; o.textContent = p; sel.appendChild(o); });
+    }
+
+    function filterBookings() {
+      const s = document.getElementById('searchBooking').value.toLowerCase().trim();
+      const p = document.getElementById('filterPackage').value;
+      const st = document.getElementById('filterStatus').value;
+      let bookings = [...cachedBookings];
+      if (s) bookings = bookings.filter((b) => (b.name||'').toLowerCase().includes(s) || (b.package||'').toLowerCase().includes(s) || (b.bookingID||'').toLowerCase().includes(s));
+      if (p) bookings = bookings.filter((b) => b.package === p);
+      if (st) bookings = bookings.filter((b) => b.status === st);
+      bookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      displayBookings(bookings);
+    }
+
+    function displayBookings(bookings) {
+      const tbody = document.getElementById('bookingsTableBody');
+      if (!bookings.length) { tbody.innerHTML = '<tr><td colspan="7" class="no-bookings">📭 No bookings found</td></tr>'; return; }
+      tbody.innerHTML = '';
+      bookings.forEach((b) => {
+        const s = b.status || 'confirmed';
+        const cls = s === 'confirmed' ? 'confirmed' : s === 'pending' ? 'pending' : 'cancelled';
+        const label = s === 'confirmed' ? '✅ Confirmed' : s === 'pending' ? '⏳ Pending' : '❌ Cancelled';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><strong style="color:#FFD700;">${b.bookingID}</strong></td>
+          <td><div><strong>${b.name||'?'}</strong></div><div style="font-size:12px;color:rgba(255,255,255,0.5);">${b.email||''} | ${b.phone||''}</div></td>
+          <td>${b.package||'N/A'}</td><td>${(b.date||'').slice(0,10)}</td><td>${b.persons||1}</td>
+          <td><span style="color:#FFA500;font-weight:700;">₹${(b.total||0).toLocaleString()}</span></td>
+          <td><span class="booking-status ${cls}">${label}</span></td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function clearFilters() {
+      document.getElementById('searchBooking').value = '';
+      document.getElementById('filterPackage').value = '';
+      document.getElementById('filterStatus').value = '';
+      filterBookings();
+    }
+
+    async function loadDashboardData() {
+      await fetchBookings();
+      document.getElementById('totalBookings').textContent = cachedBookings.length;
+      let rev = 0; const cust = new Set();
+      cachedBookings.forEach((b) => { rev += b.total || 0; if (b.email) cust.add(b.email); });
+      document.getElementById('totalRevenue').textContent = '₹' + rev.toLocaleString();
+      document.getElementById('totalCustomers').textContent = cust.size;
+      filterBookings();
+    }
+
+    const packagesData = [
+      { id:1, name:"Goa Beach Escape", location:"Goa, India", duration:"3 Days / 2 Nights", price:4999, rating:5, image:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80", badge:"Popular", badgeClass:"popular", description:"Experience vibrant beaches and nightlife of Goa.",
+        itinerary:["Day 1: Arrival & Beach Welcome","Day 2: North Goa Tour","Day 3: South Goa & Departure"],
+        includes:["3 Star Hotel","Breakfast & Dinner","Airport Transfers","Sightseeing","Water Sports"],
+        highlights:["🌊 Baga Beach Sunset","🏄 Water Sports","🎵 Nightlife","🍽️ Beachside Dinner"] },
+      { id:2, name:"Manali Adventure", location:"Himachal Pradesh", duration:"5 Days / 4 Nights", price:10999, rating:5, image:"https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=900&q=80", badge:"Adventure", badgeClass:"adventure", description:"Snow-capped mountains and adventure in Manali.",
+        itinerary:["Day 1: Arrival","Day 2: Solang Valley","Day 3: Rohtang Pass","Day 4: River Rafting","Day 5: Departure"],
+        includes:["4 Star Hotel","All Meals","Snow Activities","River Rafting","Transport"],
+        highlights:["❄️ Snow Activities","🏔️ Rohtang Pass","🚣 River Rafting","🌲 Nature Walks"] },
+      { id:3, name:"Kerala Nature Tour", location:"Kerala", duration:"4 Days / 3 Nights", price:8999, rating:5, image:"https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=80", badge:"Popular", badgeClass:"popular", description:"Backwaters, houseboats, and greenery of Kerala.",
+        itinerary:["Day 1: Houseboat","Day 2: Alleppey","Day 3: Munnar","Day 4: Departure"],
+        includes:["Houseboat Stay","Kerala Meals","Tea Garden Tour","Massage","Transfers"],
+        highlights:["🚣 Houseboat Ride","🌿 Munnar Tea","💆 Massage","🍛 Kerala Cuisine"] },
+      { id:4, name:"Maldives Luxury", location:"Maldives", duration:"5 Days / 4 Nights", price:49999, rating:5, image:"https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=900&q=80", badge:"Luxury", badgeClass:"luxury", description:"Ultimate luxury in the pristine beaches of Maldives.",
+        itinerary:["Day 1: Check-in","Day 2: Snorkeling","Day 3: Island Hopping","Day 4: Spa","Day 5: Departure"],
+        includes:["Overwater Villa","All Meals","Snorkeling","Spa","Private Transfers"],
+        highlights:["🌊 Overwater Villa","🐠 Sea Turtles","🌴 Island Hopping","💆 Luxury Spa"] },
+      { id:5, name:"Santorini Greece", location:"Santorini", duration:"6 Days / 5 Nights", price:79999, rating:5, image:"https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=900&q=80", badge:"Luxury", badgeClass:"luxury", description:"White-washed buildings and blue domes of Santorini.",
+        itinerary:["Day 1: Oia Sunset","Day 2: Fira","Day 3: Ancient Thira","Day 4: Wine Tasting","Day 5: Red Beach","Day 6: Departure"],
+        includes:["Cliffside Hotel","Breakfast & Dinner","Caldera Cruise","Wine Tasting","Transfers"],
+        highlights:["🌅 Oia Sunset","⛵ Caldera Cruise","🍷 Wine Tasting","🏛️ Ancient Ruins"] },
+      { id:6, name:"Kyoto Japan", location:"Kyoto", duration:"7 Days / 6 Nights", price:99999, rating:5, image:"https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=900&q=80", badge:"Popular", badgeClass:"popular", description:"Traditional Japanese culture, temples, and gardens.",
+        itinerary:["Day 1: Gion","Day 2: Temples","Day 3: Bamboo Forest","Day 4: Tea Ceremony","Day 5: Nara","Day 6: Kimono","Day 7: Departure"],
+        includes:["Ryokan","Breakfast & Dinner","Tea Ceremony","Kimono Rental","Transfers"],
+        highlights:["🏯 Golden Pavilion","🎋 Bamboo Forest","🍵 Tea Ceremony","👘 Kimono"] },
+      { id:7, name:"Swiss Alps", location:"Switzerland", duration:"7 Days / 6 Nights", price:89999, rating:5, image:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80", badge:"Winter", badgeClass:"winter", description:"Majestic Swiss Alps with scenic train rides.",
+        itinerary:["Day 1: Interlaken","Day 2: Jungfraujoch","Day 3: Grindelwald","Day 4: Lucerne","Day 5: Zermatt","Day 6: Glacier Express","Day 7: Departure"],
+        includes:["Alpine Resort","Swiss Breakfast","Jungfraujoch Tour","Glacier Express","Transfers"],
+        highlights:["🏔️ Top of Europe","🚂 Glacier Express","🏔️ Matterhorn","🌊 Lucerne Cruise"] },
+      { id:8, name:"Amazon Expedition", location:"Brazil", duration:"6 Days / 5 Nights", price:69999, rating:4, image:"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80", badge:"Adventure", badgeClass:"adventure", description:"Thrilling expedition into the Amazon rainforest.",
+        itinerary:["Day 1: Lodge","Day 2: Canopy Walk","Day 3: River Cruise","Day 4: Night Safari","Day 5: Village","Day 6: Departure"],
+        includes:["Jungle Lodge","All Meals","Canopy Walk","River Cruise","Jungle Tours"],
+        highlights:["🌿 Canopy Walk","🐬 River Dolphins","🦜 Wildlife","🏕️ Night Safari"] },
+      { id:9, name:"Bali Paradise", location:"Bali", duration:"5 Days / 4 Nights", price:39999, rating:4, image:"https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=900&q=80", badge:"Popular", badgeClass:"popular", description:"Beautiful beaches, rice terraces, and temples of Bali.",
+        itinerary:["Day 1: Ubud","Day 2: Rice Terraces","Day 3: Tanah Lot","Day 4: Nusa Penida","Day 5: Departure"],
+        includes:["Resort with Pool","Breakfast","Nusa Penida Tour","Temples","Transfers"],
+        highlights:["🌾 Rice Terraces","🌅 Tanah Lot","🏝️ Nusa Penida","🙏 Ubud"] },
+      { id:10, name:"Dubai City Explorer", location:"Dubai", duration:"4 Days / 3 Nights", price:55999, rating:5, image:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=900&q=80", badge:"Luxury", badgeClass:"luxury", description:"Luxury, shopping, and iconic landmarks of Dubai.",
+        itinerary:["Day 1: Burj Khalifa","Day 2: Desert Safari","Day 3: Dubai Mall","Day 4: Departure"],
+        includes:["5 Star Hotel","Breakfast","Burj Khalifa Entry","Desert Safari","Transfers"],
+        highlights:["🏢 Burj Khalifa","🏜️ Desert Safari","🛍️ Dubai Mall","💃 Tanura Dance"] },
+      { id:11, name:"Paris Romance", location:"Paris", duration:"5 Days / 4 Nights", price:89999, rating:5, image:"https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=900&q=80", badge:"Popular", badgeClass:"popular", description:"Romantic Paris with Eiffel Tower and Seine cruises.",
+        itinerary:["Day 1: Eiffel Tower","Day 2: Louvre","Day 3: Versailles","Day 4: Montmartre","Day 5: Departure"],
+        includes:["City Hotel","Breakfast","Louvre Entry","Seine Cruise","Versailles"],
+        highlights:["🗼 Eiffel Tower","🎨 Louvre","🛳️ Seine Cruise","🏰 Versailles"] },
+      { id:12, name:"Singapore Explorer", location:"Singapore", duration:"4 Days / 3 Nights", price:45999, rating:4, image:"https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=900&q=80", badge:"Popular", badgeClass:"popular", description:"Clean, green, modern city-state of Singapore.",
+        itinerary:["Day 1: Marina Bay","Day 2: Gardens","Day 3: Sentosa","Day 4: Departure"],
+        includes:["Hotel","Breakfast","Universal Studios","Gardens by Bay","Transfers"],
+        highlights:["🌳 Gardens by Bay","🎢 Universal Studios","🏖️ Sentosa","🌃 Marina Bay"] },
+      { id:13, name:"New York City", location:"New York", duration:"5 Days / 4 Nights", price:79999, rating:5, image:"https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=900&q=80", badge:"Popular", badgeClass:"popular", description:"The city that never sleeps.",
+        itinerary:["Day 1: Times Square","Day 2: Statue of Liberty","Day 3: Central Park","Day 4: Brooklyn Bridge","Day 5: Departure"],
+        includes:["Manhattan Hotel","Breakfast","Statue Cruise","Met Museum","Transfers"],
+        highlights:["🗽 Statue of Liberty","🎭 Broadway","🌳 Central Park","🌉 Brooklyn Bridge"] },
+      { id:14, name:"Sri Lanka Beauty", location:"Sri Lanka", duration:"6 Days / 5 Nights", price:34999, rating:4, image:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80", badge:"Adventure", badgeClass:"adventure", description:"Pearl of the Indian Ocean.",
+        itinerary:["Day 1: Negombo","Day 2: Sigiriya","Day 3: Kandy","Day 4: Nuwara Eliya","Day 5: Yala Safari","Day 6: Departure"],
+        includes:["Hotel","Breakfast","Sigiriya Rock","Yala Safari","Transfers"],
+        highlights:["🏰 Sigiriya Rock","🐘 Yala Safari","🍃 Tea Gardens","🛕 Temple of Tooth"] },
+      { id:15, name:"Costa Rica Adventure", location:"Costa Rica", duration:"7 Days / 6 Nights", price:89999, rating:5, image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=900&q=80", badge:"Adventure", badgeClass:"adventure", description:"Biodiversity with rainforests and volcanoes.",
+        itinerary:["Day 1: Arenal","Day 2: Monteverde","Day 3: Zip-lining","Day 4: Manuel Antonio","Day 5: Surf","Day 6: Tortuguero","Day 7: Departure"],
+        includes:["Eco-Lodge","All Meals","Zip-lining","National Parks","Transfers"],
+        highlights:["🌋 Arenal Volcano","🌿 Cloud Forest","🦥 Wildlife","🏄 Surf Lessons"] },
+      { id:16, name:"Australia Down Under", location:"Australia", duration:"8 Days / 7 Nights", price:129999, rating:5, image:"https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=900&q=80", badge:"Luxury", badgeClass:"luxury", description:"Sydney Opera House, Great Barrier Reef, and wildlife.",
+        itinerary:["Day 1: Sydney","Day 2: Opera House","Day 3: Reef","Day 4: Daintree","Day 5: Melbourne","Day 6: Penguins","Day 7: Ocean Road","Day 8: Departure"],
+        includes:["City Hotel","Breakfast","Reef Tour","Penguin Parade","Transfers"],
+        highlights:["🎭 Opera House","🐠 Great Barrier Reef","🐧 Penguins","🌊 Ocean Road"] }
+    ];
+
+    let showAllPackages = false;
+    const INITIAL_DISPLAY = 6;
+
+    function togglePackages() {
+      showAllPackages = !showAllPackages;
+      renderPackages();
+      const btn = document.getElementById('viewMoreBtn');
+      if (showAllPackages) {
+        btn.innerHTML = `📦 Show Less Packages (${packagesData.length} total)`;
+        btn.style.background = 'linear-gradient(135deg,#e74c3c,#c0392b)';
+      } else {
+        btn.innerHTML = `📦 View More Packages (${packagesData.length - INITIAL_DISPLAY} more)`;
+        btn.style.background = 'linear-gradient(135deg,#FFD700,#FFA500)';
+      }
+      document.getElementById('packages').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function renderPackages() {
+      const grid = document.getElementById('packageGrid');
+      grid.innerHTML = '';
+      const count = showAllPackages ? packagesData.length : INITIAL_DISPLAY;
+      packagesData.slice(0, count).forEach((pkg) => {
+        const stars = '★'.repeat(pkg.rating) + '☆'.repeat(5 - pkg.rating);
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.name = pkg.name;
+        card.innerHTML = `
+          <img src="${pkg.image}" alt="${pkg.name}">
+          <div class="card-content">
+            <h3>${pkg.name} <span class="badge ${pkg.badgeClass}">${pkg.badge}</span></h3>
+            <div class="location">📍 ${pkg.location}</div>
+            <div class="duration">📅 ${pkg.duration}</div>
+            <div class="price">₹${pkg.price.toLocaleString()}</div>
+            <div class="rating">${stars}</div>
+            <div class="card-buttons">
+              <button class="details-btn" onclick="showDetails(${pkg.id})">📋 Details</button>
+              <button class="book-btn" onclick="bookPackage('${pkg.name}', ${pkg.price})">✨ Book Now</button>
+            </div>
+          </div>`;
+        grid.appendChild(card);
+      });
+    }
+
+    function showDetails(id) {
+      const pkg = packagesData.find((p) => p.id === id);
+      const stars = '★'.repeat(pkg.rating) + '☆'.repeat(5 - pkg.rating);
+      document.getElementById('detailsContent').innerHTML = `
+        <h2>${pkg.name} <span class="badge ${pkg.badgeClass}">${pkg.badge}</span></h2>
+        <div style="color:rgba(255,255,255,0.6);margin-bottom:15px;">📍 ${pkg.location}</div>
+        <div class="popup-rating">${stars}</div>
+        <div class="popup-price">₹${pkg.price.toLocaleString()} <span style="font-size:16px;font-weight:400;">per person</span></div>
+        <div class="popup-section"><h4>📋 Overview</h4><p>${pkg.description}</p></div>
+        <div class="popup-section"><h4>📅 Itinerary</h4><ul>${pkg.itinerary.map((x) => `<li>${x}</li>`).join('')}</ul></div>
+        <div class="popup-section"><h4>✅ Included</h4><ul>${pkg.includes.map((x) => `<li>${x}</li>`).join('')}</ul></div>
+        <div class="popup-section"><h4>🌟 Highlights</h4><ul>${pkg.highlights.map((x) => `<li>${x}</li>`).join('')}</ul></div>
+        <button class="popup-book-btn" onclick="bookPackage('${pkg.name}', ${pkg.price}); closeDetails();">✨ Book Now - ₹${pkg.price.toLocaleString()}</button>`;
+      document.getElementById('detailsOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetails() {
+      document.getElementById('detailsOverlay').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    document.getElementById('detailsOverlay').addEventListener('click', function (e) { if (e.target === this) closeDetails(); });
+
+    let selectedPrice = 0;
+    let selectedPackageName = '';
+    let paymentConfirmed = false;
+
+    function bookPackage(name, price) {
+      selectedPackageName = name;
+      selectedPrice = price;
+      document.getElementById('selectedPackage').value = name;
+      document.getElementById('displayPackageName').textContent = name;
+      document.getElementById('displayPackagePrice').textContent = '₹' + price.toLocaleString();
+      updateAmount(); resetPayment();
+      document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+      closeDetails();
+    }
+
+    function updateAmount() {
+      const p = parseInt(document.getElementById('persons').value) || 1;
+      document.getElementById('displayAmount').innerText = '₹' + (selectedPrice * p).toLocaleString();
+      if (selectedPackageName) document.getElementById('displayPackagePrice').textContent = '₹' + (selectedPrice * p).toLocaleString();
+    }
+
+    document.getElementById('persons').addEventListener('input', () => { updateAmount(); resetPayment(); });
+
+    function copyUPI() {
+      const id = document.getElementById('upiIdDisplay').textContent;
+      navigator.clipboard.writeText(id).then(() => alert('✅ Copied: ' + id));
+    }
+
+    function resetPayment() {
+      paymentConfirmed = false;
+      const btn = document.getElementById('confirmPayBtn');
+      const st = document.getElementById('paymentStatus');
+      btn.disabled = true;
+      btn.style.background = 'rgba(255,255,255,0.1)';
+      btn.innerText = '✅ Confirm Payment & Book';
+      st.className = 'payment-status pending';
+      st.style.display = 'block';
+      st.innerHTML = '⏳ Please complete the payment by scanning the QR code';
+    }
+
+    function simulatePayment() {
+      if (!selectedPackageName) return alert('⚠️ Please select a package first!');
+      const st = document.getElementById('paymentStatus');
+      const btn = document.getElementById('confirmPayBtn');
+      st.className = 'payment-status pending';
+      st.innerHTML = '⏳ Processing payment...';
+      setTimeout(() => {
+        paymentConfirmed = true;
+        st.className = 'payment-status success';
+        st.innerHTML = "✅ Payment Successful! Click 'Confirm Payment & Book'.";
+        btn.disabled = false;
+        btn.style.background = 'linear-gradient(135deg,#28a745,#20c997)';
+      }, 1500);
+    }
+
+    document.getElementById('qrCodeImage').addEventListener('click', () => { if (!paymentConfirmed) simulatePayment(); });
+    document.getElementById('simulatePayBtn').addEventListener('click', () => { if (!paymentConfirmed) simulatePayment(); });
+
+    document.getElementById('confirmPayBtn').addEventListener('click', async function (e) {
+      e.preventDefault();
+      if (!selectedPackageName) return alert('⚠️ Please select a package first!');
+      if (!paymentConfirmed) return alert("⚠️ Complete payment first");
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const packageName = document.getElementById('selectedPackage').value;
+      const date = document.getElementById('travelDate').value;
+      const persons = parseInt(document.getElementById('persons').value);
+      const transport = document.getElementById('transport').value;
+      const hotel = document.getElementById('hotel').value;
+      const payment = document.getElementById('payment').value;
+      const pName = document.getElementById('passengerName').value.trim();
+      const pAge = document.getElementById('passengerAge').value.trim();
+      const pGender = document.getElementById('passengerGender').value;
+      const pId = document.getElementById('passengerId').value.trim();
+
+      if (!name || !email || !phone || phone.length < 10) return alert('Fill contact details correctly');
+      if (!date || !pName || !pAge || !pGender || !pId) return alert('Fill all passenger details');
+
+      const total = selectedPrice * persons;
+      const bookingID = 'GLR' + Math.floor(Math.random() * 1000000);
+      const booking = { bookingID, name, email, phone, package: packageName, date, persons, transport, hotel, payment, total, status: 'confirmed', passenger: { name: pName, age: pAge, gender: pGender, idProof: pId } };
+
+      const btn = document.getElementById('confirmPayBtn');
+      const st = document.getElementById('paymentStatus');
+      btn.disabled = true;
+      btn.textContent = '⏳ Saving...';
+      st.className = 'payment-status sending';
+      st.style.display = 'block';
+      st.innerHTML = '📡 Sending booking to server...';
+
+      try {
+        await apiRequest('/api/bookings', { method: 'POST', body: JSON.stringify(booking) });
+        st.className = 'payment-status success';
+        st.innerHTML = '✅ Booking saved! Confirmation email sent.';
+        showTicket(booking);
+        resetPayment();
+        if (document.getElementById('managerDashboard').classList.contains('active')) await loadDashboardData();
+      } catch (err) {
+        st.className = 'payment-status email-error';
+        st.innerHTML = '❌ Booking failed: ' + err.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '✅ Confirm Payment & Book';
+      }
+    });
+
+    function showTicket(d) {
+      const html = `<div id="ticketPopup" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(20,20,50,0.98);padding:30px;width:480px;border-radius:15px;z-index:99999;max-height:90vh;overflow-y:auto;color:white;border:1px solid rgba(255,215,0,0.3);">
+        <h2 style="color:#FFD700;text-align:center;border-bottom:2px solid rgba(255,215,0,0.3);padding-bottom:10px;">✈️ GLR Holidays</h2>
+        <h3 style="color:#28a745;text-align:center;">✅ Booking Confirmed</h3>
+        <p style="text-align:center;font-size:13px;color:rgba(255,255,255,0.5);">📧 Email sent to ${d.email}</p>
+        <hr style="border-color:rgba(255,255,255,0.1);">
+        <p><b>Booking ID :</b> ${d.bookingID}</p>
+        <p><b>Contact :</b> ${d.name} (${d.phone})</p>
+        <p><b>Package :</b> ${d.package}</p>
+        <p><b>Date :</b> ${d.date}</p>
+        <p><b>Travelers :</b> ${d.persons}</p>
+        <p><b>Transport :</b> ${d.transport}</p>
+        <p><b>Hotel :</b> ${d.hotel}</p>
+        <p><b>Payment :</b> ${d.payment}</p>
+        <hr style="border-color:rgba(255,255,255,0.1);">
+        <h4 style="color:#FFD700;">👤 Passenger</h4>
+        <p><b>Name :</b> ${d.passenger.name}</p>
+        <p><b>Age :</b> ${d.passenger.age}</p>
+        <p><b>Gender :</b> ${d.passenger.gender}</p>
+        <p><b>ID :</b> ${d.passenger.idProof}</p>
+        <hr style="border-color:rgba(255,255,255,0.1);">
+        <h3 style="color:#FFA500;">Total : ₹${d.total.toLocaleString()}</h3>
+        <button onclick="closeTicket()" style="width:100%;padding:12px;background:rgba(192,57,43,0.8);color:white;border:none;cursor:pointer;border-radius:8px;margin-top:15px;">Close</button>
+      </div>`;
+      document.body.insertAdjacentHTML('beforeend', html);
+    }
+
+    function closeTicket() { const p = document.getElementById('ticketPopup'); if (p) p.remove(); }
+
+    document.getElementById('search').addEventListener('keyup', (e) => {
+      const f = e.target.value.toUpperCase();
+      document.querySelectorAll('.card').forEach((c) => {
+        const title = (c.dataset.name || '').toUpperCase();
+        c.style.display = title.indexOf(f) > -1 ? '' : 'none';
+      });
+    });
+
+    window.onload = function () { renderPackages(); };
+  </script>
+</body>
+</html>
